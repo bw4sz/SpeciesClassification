@@ -25,6 +25,9 @@ class Common_config:
     def show_bbox(self):
         return config["COMMON"]["SHOW_BBOX"]
 
+    def get_model_path(self):
+        return config["COMMON"]["TREE_MODEL"]
+
 
 
     

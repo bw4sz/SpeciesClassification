@@ -19,10 +19,13 @@ from common import*
 from urllib.parse import urlparse
 from common_config import Common_config
 from common import str2bool, delete_all_uploaded
+import Predict_Trees
+from keras.preprocessing.image import load_img
 
 config = Common_config()
 root_direc = config.get_root_path()
 sample_direc = config.get_sample_img_path()
+
 upload_direc = config.get_upload_path()
 
 bbox = Bbox()
@@ -39,6 +42,9 @@ classify_format = '{0}/species-recognition/v{1}/predict?topK={2}&predictMode={3}
 api_version = '0.1'
 
 max_file_size = 3750000
+
+# Init a tree model
+tree_model = Predict_Trees.Tree_Model(config.get_model_path())
 
 class Predict:
 
@@ -66,9 +72,6 @@ class Predict:
     
     error_message = ''
     config = Common_config()
-    show_bbox = config.show_bbox()
-
-    #classify_detect = str2bool(show_bbox_UI) and show_bbox
    
     predictMode = PredictMode.classifyOnly
     #if(classify_detect):
@@ -111,17 +114,13 @@ class Predict:
     if not valid_img:
       has_error = True
       return data, img_path, has_error, error_message
-
-    file = open(img_full_path, mode='rb')
-    img = file.read()
-
-    data, has_error = self.get_api_response(img, predictMode=predictMode.name)
- 
-    if(not has_error):
-      if(predictMode != PredictMode.classifyOnly):
-        img_path = bbox.draw_bbox(data, file_path=img_path)
-        return data, img_path, has_error, error_message
     
+    img = load_img(img_full_path)
+    img = img.img_to_array(img)
+    print(type(img))
+    data = tree_model.predict_image(img) 
+    
+    #Upload directory
     temp = img_path.split('/')
     file_part = temp[len(temp)-1].split("\\")
     img_path = upload_direc + "/" + file_part[len(file_part)-1]

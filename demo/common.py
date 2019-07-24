@@ -19,6 +19,7 @@ config = Common_config()
 root_direc = config.get_root_path()
 sample_direc = config.get_sample_img_path()
 upload_direc = config.get_upload_path()
+model_path = config.get_model_path()
 
 max_file_size = 3750000
 
@@ -157,10 +158,8 @@ def save_posted_file(posted_file):
 
 def get_image_paths(img_path):
     
-    img_path = request.args.get("imgPath")
-               .replace("thumbnails", "animals")
-               .replace("\\", "/")
-                 
+    img_path = request.args.get("imgPath").replace("thumbnails", "animals").replace("\\", "/")
+    
     img_full_path = root_direc + img_path
 
     return img_path, img_full_path
