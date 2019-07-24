@@ -1,0 +1,15 @@
+#!wing
+#!version=6.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+debug.named-entry-points = (1,
+                            {'app': ({},
+                                     {'auto-show': False,
+                                      'launch-id': ('project',
+        (u'',
+         '')),
+                                      'loc': loc('app.py')})})
+proj.file-type = 'shared'
+proj.main-file = 'entry:app'
